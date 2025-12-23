@@ -1,0 +1,1068 @@
+{
+  "name": "users",
+  "nodes": [
+    {
+      "parameters": {
+        "fieldToSplitOut": "users",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1344,
+        -32
+      ],
+      "id": "f87f3a99-947f-41e6-99e9-cdcb7ee0e89e",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "compare": "selectedFields",
+        "fieldsToCompare": "email",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        1536,
+        -32
+      ],
+      "id": "dbb21913-0884-4046-9d56-73e165423725",
+      "name": "Remove Duplicates"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "users",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2512,
+        -32
+      ],
+      "id": "75924232-531e-44bd-9ed6-591c91f1a488",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d7e8967d-25f9-49f6-9156-5757e9ed08b2",
+              "name": "error",
+              "value": "={{ $json.body.error }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1936,
+        -576
+      ],
+      "id": "f80e40f7-bd19-4d54-9a3a-e2fb4b78bcc6",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        768,
+        -576
+      ],
+      "id": "aa5deb17-f9f5-449c-b729-26b0b4b75a1c",
+      "name": "No Operation, do nothing1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d7e8967d-25f9-49f6-9156-5757e9ed08b2",
+              "name": "users",
+              "value": "={{ $json.body.users }}",
+              "type": "array"
+            },
+            {
+              "id": "f46bf9e1-7e7a-498b-83c7-f2304e39cc28",
+              "name": "start_time",
+              "value": "={{ $json.body.start_time }}",
+              "type": "string"
+            },
+            {
+              "id": "224115a6-bc04-4d23-93fe-7ec69dc75ba4",
+              "name": "end_time",
+              "value": "={{ $json.body.end_time }}",
+              "type": "string"
+            },
+            {
+              "id": "73f61a25-12e6-431f-9b98-b32d00805125",
+              "name": "processing_time",
+              "value": "={{ ($json.body.end_time.toDateTime() - $json.body.start_time.toDateTime())/1000 }}",
+              "type": "string"
+            },
+            {
+              "id": "6e0daa69-d614-4d97-a995-303ca1d12db6",
+              "name": "workflow_id",
+              "value": "={{ $json.body.workflow_id }}",
+              "type": "string"
+            },
+            {
+              "id": "44ee3063-299e-45b6-b4de-c1c83beb75ed",
+              "name": "execution_id",
+              "value": "={{ $json.body.execution_id }}",
+              "type": "string"
+            },
+            {
+              "id": "3dc665a2-0c9a-485d-a793-f76ce974ffcf",
+              "name": "time",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        336,
+        -576
+      ],
+      "id": "304f5dd3-32f8-4118-a178-39fb44b4a1a4",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "error-log",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        1728,
+        -576
+      ],
+      "id": "a5d22f04-e92f-457e-a759-824cbff172f9",
+      "name": "ErrorLogWebhook",
+      "webhookId": "f8dadd78-7cbf-43fd-bbe5-0e2220a42a7c"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "data-log",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        128,
+        -576
+      ],
+      "id": "9c2786ad-5b0a-47ae-9569-a9aa75fe7a56",
+      "name": "DataLog",
+      "webhookId": "f8dadd78-7cbf-43fd-bbe5-0e2220a42a7c"
+    },
+    {
+      "parameters": {
+        "maxItems": 10
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        2320,
+        -32
+      ],
+      "id": "5b45f6c4-206d-4d3e-bf10-73e67b4b76fd",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "content": "## Endpoint to receive the users",
+        "height": 240,
+        "width": 976
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        -672
+      ],
+      "typeVersion": 1,
+      "id": "83313146-1951-4645-baaa-9f771e900f13",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Endpoint to receive the errors",
+        "height": 240,
+        "width": 992
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1616,
+        -672
+      ],
+      "typeVersion": 1,
+      "id": "9d40b1d7-20a4-48f2-82b1-af1854b83649",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/error-log",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "error",
+              "value": "={{ $json.error }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1152,
+        192
+      ],
+      "id": "4b720d8b-98d3-4d14-9b3c-f6565cf8e600",
+      "name": "LOG API ERROR"
+    },
+    {
+      "parameters": {
+        "path": "process-users",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        48,
+        0
+      ],
+      "id": "9dac2f14-2e46-4017-b1a7-022db5c2cc51",
+      "name": "Main Webhook",
+      "webhookId": "f8dadd78-7cbf-43fd-bbe5-0e2220a42a7c"
+    },
+    {
+      "parameters": {
+        "url": "https://dummyjson.com/users",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": "20"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        528,
+        0
+      ],
+      "id": "2bfca3d5-87e6-43cc-8ee9-2f66cc284116",
+      "name": "Retrieve Users Data",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "97eeb6a2-9083-41db-bb50-0c1cb03684cc",
+              "name": "full_name",
+              "value": "={{ $json.firstName }} {{ $json.lastName }}",
+              "type": "string"
+            },
+            {
+              "id": "d75d0b44-d7b1-4190-81ed-fd6d66ad09fc",
+              "name": "email",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "7a8b4f29-a0e4-476f-b187-8b220bad06ab",
+              "name": "phone",
+              "value": "={{ $json.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "821f637e-f6c5-47e4-9341-aa4392a805f9",
+              "name": "company_name",
+              "value": "={{ $json.company.name }}",
+              "type": "string"
+            },
+            {
+              "id": "2d738d95-7cdb-426f-bb2a-882b0b28cef0",
+              "name": "processed_at ",
+              "value": "={{ $now }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1760,
+        -32
+      ],
+      "id": "bc857feb-2e77-4c26-aa20-28c0a226b4b2",
+      "name": "Extract Important Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c15ce1e8-bee5-41d7-8206-81de5c081c2a",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "example.com",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        2016,
+        -32
+      ],
+      "id": "b24d3101-ec4d-4870-8239-44b84717f2f7",
+      "name": "Filter Emails Domains"
+    },
+    {
+      "parameters": {
+        "content": "## Reversed the filter conditions\nBecause there are no emails with **@example.com** domain retrieved\n",
+        "height": 304,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1712,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "4461345e-38f0-4200-b584-be472fc49b97",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/data-log",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "users",
+              "value": "={{ $json.users }}"
+            },
+            {
+              "name": "start_time",
+              "value": "={{ $('get start time').item.json.start_time }}"
+            },
+            {
+              "name": "end_time",
+              "value": "={{ $now.setZone(\"utc\") }}"
+            },
+            {
+              "name": "=workflow_id",
+              "value": "={{$workflow.id}}"
+            },
+            {
+              "name": "execution_id",
+              "value": "={{$execution.id}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2688,
+        -32
+      ],
+      "id": "3a7b4476-f9ce-4f28-9af0-6377e5cbabc3",
+      "name": "Log Processed Users"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/error-log",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "error",
+              "value": "={{ $json.error }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1776,
+        192
+      ],
+      "id": "f241c88e-e30d-46c2-8c97-d301b59b06eb",
+      "name": "Log <10 users error"
+    },
+    {
+      "parameters": {
+        "content": "## check number of retrieved users is >= 10",
+        "height": 304,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        736,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "477c84f8-80e3-4c39-861a-97667253297a",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#errors",
+          "mode": "name"
+        },
+        "text": "=## Error in users processing api\nerror message: {{ $json.error.message }}\nerror name: {{ $json.error.name }}\n\nsource : {{ $json.error.source }}\ntimestamp: {{ $json.error.timestamp }}\nworkflow_id: {{ $json.error.workflow_id }}\nexecution_id: {{ $json.error.execution_id }}\n",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2160,
+        -576
+      ],
+      "id": "390b4f16-03fa-4b5e-a250-1155a98959ef",
+      "name": "Send a message",
+      "webhookId": "f8539285-9077-408f-b875-ac18699e10ec",
+      "credentials": {
+        "slackApi": {
+          "id": "ppD58lher5tID4Po",
+          "name": "Slack account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#users_processing",
+          "mode": "name"
+        },
+        "text": "=## users processing job done successfully \nnumber of processed users: {{ $json.users.length }}\nstart_time: {{ $json.start_time.toDateTime().toLocal().format('yyyy-MM-dd hh:mm') }}\nend_time: {{ $json.end_time.toDateTime().toLocal().format('yyyy-MM-dd hh:mm') }}\ntimestamp: {{ $now.toLocal().format('yyyy-MM-dd hh:mm') }}\nprocessing time: {{ $json.processing_time }} seconds\nworkflow_id: {{ $json.workflow_id }}\nexecution_id: {{ $json.execution_id }}\n",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        544,
+        -576
+      ],
+      "id": "931df75a-d3bd-416b-bd15-1a6b54311e71",
+      "name": "Send a message1",
+      "webhookId": "f8539285-9077-408f-b875-ac18699e10ec",
+      "credentials": {
+        "slackApi": {
+          "id": "ppD58lher5tID4Po",
+          "name": "Slack account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        -576
+      ],
+      "id": "e9d02b17-4da2-4e3b-b3dc-a66398f41ae8",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f060bb80-5d4e-4993-9975-49a4da1f64fc",
+              "name": "start_time",
+              "value": "={{ $now.setZone(\"utc\") }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        304,
+        0
+      ],
+      "id": "53d9a3c7-c633-4558-8c78-a3395d63b502",
+      "name": "get start time"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "51b95686-9863-466a-82dc-532e6b5982d6",
+              "leftValue": "={{ $json.users.length }}",
+              "rightValue": 10,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        832,
+        -16
+      ],
+      "id": "8785a408-6cd2-425e-9aed-81f74fccf8a4",
+      "name": "If users >= 10"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "15a5dbf8-09b8-45c1-a9c4-3e5cc26ded81",
+              "name": "error.source",
+              "value": "DummyJson users api",
+              "type": "string"
+            },
+            {
+              "id": "44d97512-637e-4285-b578-05bc1d935a7c",
+              "name": "error.timestamp",
+              "value": "={{ $now }}",
+              "type": "string"
+            },
+            {
+              "id": "2fd483e5-e52d-443f-aa7d-9d40819f6ffd",
+              "name": "error.processing_time",
+              "value": "={{ ($now.toUTC() - $('get start time').item.json.start_time.toDateTime() )/1000}}",
+              "type": "string"
+            },
+            {
+              "id": "67f0d1ff-86b0-429b-a156-8a0af254b5e5",
+              "name": "error.workflow_id",
+              "value": "={{$workflow.id}}",
+              "type": "string"
+            },
+            {
+              "id": "e4d123f9-fb71-4fec-aa3c-a5178d0ad2f4",
+              "name": "error.execution_id",
+              "value": "={{$execution.id}}",
+              "type": "string"
+            },
+            {
+              "id": "35998072-bd34-47a8-8809-c261744c39f1",
+              "name": "error.name",
+              "value": "={{ $json.error.name }}",
+              "type": "string"
+            },
+            {
+              "id": "c3d8cd47-e41a-4302-aee6-eefa1ae4f64b",
+              "name": "error.message",
+              "value": "={{ $json.error.message }}",
+              "type": "string"
+            },
+            {
+              "id": "fbd689a8-1a61-4b53-b462-51173f8b6d6d",
+              "name": "error.stack",
+              "value": "={{ $json.error.stack }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        992,
+        192
+      ],
+      "id": "9710437c-c5ca-4d3b-afe6-b9adf9cc3d79",
+      "name": "Api Error Structure",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "15a5dbf8-09b8-45c1-a9c4-3e5cc26ded81",
+              "name": "error.source",
+              "value": "DummyJson users api",
+              "type": "string"
+            },
+            {
+              "id": "44d97512-637e-4285-b578-05bc1d935a7c",
+              "name": "error.timestamp",
+              "value": "={{ $now }}",
+              "type": "string"
+            },
+            {
+              "id": "b86e1e80-3cec-4807-be76-c30077d1beed",
+              "name": "error.processing_time",
+              "value": "={{ ($now.toUTC() - $('get start time').item.json.start_time.toDateTime() )/1000}}",
+              "type": "string"
+            },
+            {
+              "id": "67f0d1ff-86b0-429b-a156-8a0af254b5e5",
+              "name": "error.workflow_id",
+              "value": "={{$workflow.id}}",
+              "type": "string"
+            },
+            {
+              "id": "e4d123f9-fb71-4fec-aa3c-a5178d0ad2f4",
+              "name": "error.execution_id",
+              "value": "={{$execution.id}}",
+              "type": "string"
+            },
+            {
+              "id": "35998072-bd34-47a8-8809-c261744c39f1",
+              "name": "error.name",
+              "value": "LessThanTenUsers",
+              "type": "string"
+            },
+            {
+              "id": "c3d8cd47-e41a-4302-aee6-eefa1ae4f64b",
+              "name": "error.message",
+              "value": "The dummyjson api responded with less than 10 users",
+              "type": "string"
+            },
+            {
+              "id": "3414a67f-dab2-4c66-bde5-a8d0c7fddcf5",
+              "name": "error.retrieved_users",
+              "value": "={{ $json.users || [] }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1536,
+        192
+      ],
+      "id": "f7ae2769-4e1b-4497-9b69-744b94f48819",
+      "name": "Few Users Error Structure",
+      "executeOnce": true
+    }
+  ],
+  "pinData": {
+    "ErrorLogWebhook": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "content-type": "application/json",
+            "user-agent": "axios/1.12.0",
+            "content-length": "2342",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "host": "localhost:5678",
+            "connection": "close"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "error": {
+              "source": "DummyJson users api",
+              "timestamp": "2025-12-22T16:32:20.968-05:00",
+              "workflow_id": "SXFGR1oOMaZsjXJu",
+              "execution_id": "149",
+              "name": "AxiosError",
+              "message": "404 - \"\"",
+              "stack": "AxiosError: Request failed with status code 404\n    at settle (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/axios@1.12.0/node_modules/axios/lib/core/settle.js:19:12)\n    at RedirectableRequest.handleResponse (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/axios@1.12.0/node_modules/axios/lib/adapters/http.js:565:9)\n    at RedirectableRequest.emit (node:events:531:35)\n    at RedirectableRequest._processResponse (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/follow-redirects@1.15.11/node_modules/follow-redirects/index.js:409:10)\n    at ClientRequest.RedirectableRequest._onNativeResponse (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/follow-redirects@1.15.11/node_modules/follow-redirects/index.js:102:12)\n    at Object.onceWrapper (node:events:634:26)\n    at ClientRequest.emit (node:events:519:28)\n    at HTTPParser.parserOnIncomingClient (node:_http_client:716:27)\n    at HTTPParser.parserOnHeadersComplete (node:_http_common:117:17)\n    at TLSSocket.socketOnData (node:_http_client:558:22)\n    at Axios.request (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/axios@1.12.0/node_modules/axios/lib/core/Axios.js:45:41)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at invokeAxios (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_08b575bec2313d5d8a4cc75358971443/node_modules/n8n-core/src/execution-engine/node-execution-context/utils/request-helper-functions.ts:313:10)\n    at proxyRequestToAxios (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_08b575bec2313d5d8a4cc75358971443/node_modules/n8n-core/src/execution-engine/node-execution-context/utils/request-helper-functions.ts:695:20)\n    at Object.request (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_08b575bec2313d5d8a4cc75358971443/node_modules/n8n-core/src/execution-engine/node-execution-context/utils/request-helper-functions.ts:1749:4)"
+            }
+          },
+          "webhookUrl": "http://localhost:5678/webhook/error-log",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "Main Webhook": [
+      {
+        "json": {}
+      }
+    ],
+    "DataLog": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "content-type": "application/json",
+            "user-agent": "axios/1.12.0",
+            "content-length": "1946",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "host": "localhost:5678",
+            "connection": "close"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "users": [
+              {
+                "full_name": "Emily Johnson",
+                "email": "emily.johnson@x.dummyjson.com",
+                "phone": "+81 965-431-3024",
+                "company_name": "Dooley, Kozey and Cronin",
+                "processed_at ": "2025-12-22T17:46:14.185-05:00"
+              },
+              {
+                "full_name": "Michael Williams",
+                "email": "michael.williams@x.dummyjson.com",
+                "phone": "+49 258-627-6644",
+                "company_name": "Spinka - Dickinson",
+                "processed_at ": "2025-12-22T17:46:14.187-05:00"
+              },
+              {
+                "full_name": "Sophia Brown",
+                "email": "sophia.brown@x.dummyjson.com",
+                "phone": "+81 210-652-2785",
+                "company_name": "Schiller - Zieme",
+                "processed_at ": "2025-12-22T17:46:14.187-05:00"
+              },
+              {
+                "full_name": "James Davis",
+                "email": "james.davis@x.dummyjson.com",
+                "phone": "+49 614-958-9364",
+                "company_name": "Pagac and Sons",
+                "processed_at ": "2025-12-22T17:46:14.188-05:00"
+              },
+              {
+                "full_name": "Emma Miller",
+                "email": "emma.miller@x.dummyjson.com",
+                "phone": "+91 759-776-1614",
+                "company_name": "Graham - Gulgowski",
+                "processed_at ": "2025-12-22T17:46:14.188-05:00"
+              },
+              {
+                "full_name": "Olivia Wilson",
+                "email": "olivia.wilson@x.dummyjson.com",
+                "phone": "+91 607-295-6448",
+                "company_name": "Pfannerstill Inc",
+                "processed_at ": "2025-12-22T17:46:14.189-05:00"
+              },
+              {
+                "full_name": "Alexander Jones",
+                "email": "alexander.jones@x.dummyjson.com",
+                "phone": "+61 260-824-4986",
+                "company_name": "Dickens - Beahan",
+                "processed_at ": "2025-12-22T17:46:14.189-05:00"
+              },
+              {
+                "full_name": "Ava Taylor",
+                "email": "ava.taylor@x.dummyjson.com",
+                "phone": "+1 458-853-7877",
+                "company_name": "Nikolaus Inc",
+                "processed_at ": "2025-12-22T17:46:14.190-05:00"
+              },
+              {
+                "full_name": "Ethan Martinez",
+                "email": "ethan.martinez@x.dummyjson.com",
+                "phone": "+92 933-608-5081",
+                "company_name": "Gorczany - Gottlieb",
+                "processed_at ": "2025-12-22T17:46:14.190-05:00"
+              },
+              {
+                "full_name": "Isabella Anderson",
+                "email": "isabella.anderson@x.dummyjson.com",
+                "phone": "+49 770-658-4885",
+                "company_name": "Pollich - Hilpert",
+                "processed_at ": "2025-12-22T17:46:14.190-05:00"
+              }
+            ],
+            "start_time": "2025-12-22T22:46:13.671Z",
+            "end_time": "2025-12-22T22:46:14.209Z",
+            "workflow_id": "SXFGR1oOMaZsjXJu",
+            "execution_id": "191"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/data-log",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Extract Important Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Log Processed Users",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ErrorLogWebhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DataLog": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Main Webhook": {
+      "main": [
+        [
+          {
+            "node": "get start time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Users Data": {
+      "main": [
+        [
+          {
+            "node": "If users >= 10",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Api Error Structure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Important Fields": {
+      "main": [
+        [
+          {
+            "node": "Filter Emails Domains",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Emails Domains": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get start time": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Users Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If users >= 10": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Few Users Error Structure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Api Error Structure": {
+      "main": [
+        [
+          {
+            "node": "LOG API ERROR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Few Users Error Structure": {
+      "main": [
+        [
+          {
+            "node": "Log <10 users error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "77cb5d80-7d9d-44a8-93d3-23a6864f3eb6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2e9c75e70c15a0622719e9d5725a2eba68d051403f5554eddcc8386770059edc"
+  },
+  "id": "SXFGR1oOMaZsjXJu",
+  "tags": []
+}
